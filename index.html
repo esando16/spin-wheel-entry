@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join the Draw</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+    }
+    .icon { text-align: center; font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 32px; text-align: center; color: #1f2937; margin-bottom: 10px; }
+    .subtitle { text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 16px; }
+    input {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      border: 2px solid #d1d5db;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s;
+    }
+    input:focus { outline: none; border-color: #667eea; }
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover { transform: translateY(-2px); }
+    button:active { transform: translateY(0); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .success {
+      margin-top: 20px;
+      padding: 15px;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+      animation: slideIn 0.3s;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .error {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fee;
+      color: #c00;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+    .count {
+      margin-top: 20px;
+      text-align: center;
+      color: #6b7280;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Join the Draw</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+    }
+    .icon { text-align: center; font-size: 64px; margin-bottom: 20px; }
+    h1 { font-size: 32px; text-align: center; color: #1f2937; margin-bottom: 10px; }
+    .subtitle { text-align: center; color: #6b7280; margin-bottom: 30px; font-size: 16px; }
+    input {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      border: 2px solid #d1d5db;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      transition: border-color 0.3s;
+    }
+    input:focus { outline: none; border-color: #667eea; }
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover { transform: translateY(-2px); }
+    button:active { transform: translateY(0); }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    .success {
+      margin-top: 20px;
+      padding: 15px;
+      background: #d1fae5;
+      color: #065f46;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: bold;
+      display: none;
+      animation: slideIn 0.3s;
+    }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .error {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fee;
+      color: #c00;
+      border-radius: 10px;
+      text-align: center;
+      display: none;
+    }
+    .count {
+      margin-top: 20px;
+      text-align: center;
+      color: #6b7280;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">🎉</div>
+    <h1>Join the Draw!</h1>
+    <p class="subtitle">Enter your name to participate</p>
+    <input type="text" id="nameInput" placeholder="Your Full Name" maxlength="40" autocomplete="off">
+    <button id="submitBtn" onclick="submitName()">Add My Name</button>
+    <div class="success" id="success">✓ Successfully added! Good luck! 🍀</div>
+    <div class="error" id="error">Something went wrong. Please try again.</div>
+    <div class="count" id="count"></div>
+  </div>
+
+  <script>
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz9WaeOdslsAunBjk_IPX-XsZ126xzZAnvTlHNj1e4CTorsqzc-3XJNXbLOhMsntd0hlQ/exec';
+    
+    async function submitName() {
+      const input = document.getElementById('nameInput');
+      const btn = document.getElementById('submitBtn');
+      const name = input.value.trim();
+      
+      if (!name) {
+        alert('Please enter your name');
+        return;
+      }
+      
+      btn.disabled = true;
+      btn.textContent = 'Adding...';
+      
+      try {
+        const response = await fetch(SHEET_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name })
+        });
+        
+        input.value = '';
+        document.getElementById('success').style.display = 'block';
+        document.getElementById('error').style.display = 'none';
+        
+        setTimeout(() => {
+          document.getElementById('success').style.display = 'none';
+        }, 4000);
+        
+        updateCount();
+      } catch (error) {
+        document.getElementById('error').style.display = 'block';
+        document.getElementById('success').style.display = 'none';
+      }
+      
+      btn.disabled = false;
+      btn.textContent = 'Add My Name';
+    }
+    
+    function updateCount() {
+      const count = parseInt(localStorage.getItem('entryCount') || '0') + 1;
+      localStorage.setItem('entryCount', count);
+      document.getElementById('count').textContent = count + ' entries submitted';
+    }
+    
+    document.getElementById('nameInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') submitName();
+    });
+    
+    const currentCount = localStorage.getItem('entryCount');
+    if (currentCount) {
+      document.getElementById('count').textContent = currentCount + ' entries submitted';
+    }
+  </script>
+</body>
+</html>
