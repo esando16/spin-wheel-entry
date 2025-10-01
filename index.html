@@ -81,6 +81,16 @@
       color: #6b7280;
       font-weight: bold;
     }
+    .setup-notice {
+      background: #fef3c7;
+      border: 2px solid #f59e0b;
+      color: #92400e;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -88,6 +98,14 @@
     <div class="icon">🎉</div>
     <h1>Join the Draw!</h1>
     <p class="subtitle">Enter your name to participate</p>
+    
+    <div class="setup-notice" id="setupNotice">
+      ⚠️ Script URL not configured. Please add your Google Apps Script URL below.
+    </div>
+    
+    <input type="text" id="scriptUrl" placeholder="Google Apps Script URL" style="margin-bottom: 10px;">
+    <button onclick="saveScriptUrl()" style="margin-bottom: 15px; background: #10b981;">💾 Save Script URL</button>
+    
     <input type="text" id="nameInput" placeholder="Your Full Name" maxlength="40" autocomplete="off">
     <button id="submitBtn" onclick="submitName()">Add My Name</button>
     <div class="success" id="success">✓ Successfully added! Good luck! 🍀</div>
@@ -96,16 +114,51 @@
   </div>
 
   <script>
-    // REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
-    // Instructions:
-    // 1. Create a Google Apps Script with doPost(e) function
-    // 2. Deploy as web app
-    // 3. Replace the URL below with your deployment URL
-    const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+    let SCRIPT_URL = localStorage.getItem('wheelScriptUrl') || 'https://script.google.com/macros/s/AKfycbw7uFa6PUdtLeEJ7gYMeMb_YIgErWJe7nt7z35dL-osvExst9xOJNLtlf0ZCr-X55H-/exec';
     
-    let entryCount = 0;
+    // Load saved URL on page load
+    window.onload = function() {
+      if (SCRIPT_URL) {
+        document.getElementById('scriptUrl').value = SCRIPT_URL;
+        document.getElementById('setupNotice').style.display = 'none';
+        localStorage.setItem('wheelScriptUrl', SCRIPT_URL);
+        loadTotalCount();
+      }
+    };
+    
+    function saveScriptUrl() {
+      const url = document.getElementById('scriptUrl').value.trim();
+      if (!url) {
+        alert('Please enter a valid URL');
+        return;
+      }
+      localStorage.setItem('wheelScriptUrl', url);
+      SCRIPT_URL = url;
+      document.getElementById('setupNotice').style.display = 'none';
+      alert('✅ Script URL saved successfully!');
+      loadTotalCount();
+    }
+    
+    async function loadTotalCount() {
+      if (!SCRIPT_URL) return;
+      
+      try {
+        const response = await fetch(SCRIPT_URL + '?action=getNames');
+        const data = await response.json();
+        if (data.success) {
+          document.getElementById('count').textContent = `Total entries: ${data.count}`;
+        }
+      } catch (error) {
+        console.log('Could not load count');
+      }
+    }
     
     async function submitName() {
+      if (!SCRIPT_URL) {
+        alert('⚠️ Please configure the Google Apps Script URL first!');
+        return;
+      }
+      
       const input = document.getElementById('nameInput');
       const btn = document.getElementById('submitBtn');
       const name = input.value.trim();
@@ -134,7 +187,7 @@
           document.getElementById('success').style.display = 'none';
         }, 4000);
         
-        updateCount();
+        setTimeout(loadTotalCount, 500);
       } catch (error) {
         document.getElementById('error').style.display = 'block';
         document.getElementById('success').style.display = 'none';
@@ -142,11 +195,6 @@
       
       btn.disabled = false;
       btn.textContent = 'Add My Name';
-    }
-    
-    function updateCount() {
-      entryCount++;
-      document.getElementById('count').textContent = entryCount + ' entries submitted (this session)';
     }
     
     document.getElementById('nameInput').addEventListener('keypress', function(e) {
