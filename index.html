@@ -99,13 +99,6 @@
     <h1>Join the Draw!</h1>
     <p class="subtitle">Enter your name to participate</p>
     
-    <div class="setup-notice" id="setupNotice">
-      ⚠️ Script URL not configured. Please add your Google Apps Script URL below.
-    </div>
-    
-    <input type="text" id="scriptUrl" placeholder="Google Apps Script URL" style="margin-bottom: 10px;">
-    <button onclick="saveScriptUrl()" style="margin-bottom: 15px; background: #10b981;">💾 Save Script URL</button>
-    
     <input type="text" id="nameInput" placeholder="Your Full Name" maxlength="40" autocomplete="off">
     <button id="submitBtn" onclick="submitName()">Add My Name</button>
     <div class="success" id="success">✓ Successfully added! Good luck! 🍀</div>
@@ -114,38 +107,18 @@
   </div>
 
   <script>
-    let SCRIPT_URL = localStorage.getItem('wheelScriptUrl') || 'https://script.google.com/macros/s/AKfycbw7uFa6PUdtLeEJ7gYMeMb_YIgErWJe7nt7z35dL-osvExst9xOJNLtlf0ZCr-X55H-/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw7uFa6PUdtLeEJ7gYMeMb_YIgErWJe7nt7z35dL-osvExst9xOJNLtlf0ZCr-X55H-/exec';
     
-    // Load saved URL on page load
+    // Load total count on page load
     window.onload = function() {
-      if (SCRIPT_URL) {
-        document.getElementById('scriptUrl').value = SCRIPT_URL;
-        document.getElementById('setupNotice').style.display = 'none';
-        localStorage.setItem('wheelScriptUrl', SCRIPT_URL);
-        loadTotalCount();
-      }
+      loadTotalCount();
     };
     
-    function saveScriptUrl() {
-      const url = document.getElementById('scriptUrl').value.trim();
-      if (!url) {
-        alert('Please enter a valid URL');
-        return;
-      }
-      localStorage.setItem('wheelScriptUrl', url);
-      SCRIPT_URL = url;
-      document.getElementById('setupNotice').style.display = 'none';
-      alert('✅ Script URL saved successfully!');
-      loadTotalCount();
-    }
-    
     async function loadTotalCount() {
-      if (!SCRIPT_URL) return;
-      
       try {
         const response = await fetch(SCRIPT_URL + '?action=getNames');
         const data = await response.json();
-        if (data.success) {
+        if (data.status === 'success') {
           document.getElementById('count').textContent = `Total entries: ${data.count}`;
         }
       } catch (error) {
@@ -154,11 +127,6 @@
     }
     
     async function submitName() {
-      if (!SCRIPT_URL) {
-        alert('⚠️ Please configure the Google Apps Script URL first!');
-        return;
-      }
-      
       const input = document.getElementById('nameInput');
       const btn = document.getElementById('submitBtn');
       const name = input.value.trim();
