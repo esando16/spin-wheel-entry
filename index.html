@@ -97,7 +97,13 @@
 
   <script>
     // REPLACE THIS WITH YOUR GOOGLE APPS SCRIPT WEB APP URL
-    const SHEET_URL = 'https://docs.google.com/spreadsheets/d/1vIciZ16i7qnmZ1qsP7AvYx9B2p5X_9pY3KGhnQRvDqQ/edit?gid=0#gid=0';
+    // Instructions:
+    // 1. Create a Google Apps Script with doPost(e) function
+    // 2. Deploy as web app
+    // 3. Replace the URL below with your deployment URL
+    const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+    
+    let entryCount = 0;
     
     async function submitName() {
       const input = document.getElementById('nameInput');
@@ -113,7 +119,7 @@
       btn.textContent = 'Adding...';
       
       try {
-        const response = await fetch(SHEET_URL, {
+        const response = await fetch(SCRIPT_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
@@ -139,19 +145,13 @@
     }
     
     function updateCount() {
-      const count = parseInt(localStorage.getItem('entryCount') || '0') + 1;
-      localStorage.setItem('entryCount', count);
-      document.getElementById('count').textContent = count + ' entries submitted';
+      entryCount++;
+      document.getElementById('count').textContent = entryCount + ' entries submitted (this session)';
     }
     
     document.getElementById('nameInput').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') submitName();
     });
-    
-    const currentCount = localStorage.getItem('entryCount');
-    if (currentCount) {
-      document.getElementById('count').textContent = currentCount + ' entries submitted';
-    }
   </script>
 </body>
 </html>
