@@ -184,30 +184,47 @@
   <script>
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbz9WaeOdslsAunBjk_IPX-XsZ126xzZAnvTlHNj1e4CTorsqzc-3XJNXbLOhMsntd0hlQ/exec';
     
-    async function submitName() {
-      const input = document.getElementById('nameInput');
-      const btn = document.getElementById('submitBtn');
-      const name = input.value.trim();
-      
-      if (!name) {
-        alert('Please enter your name');
-        return;
-      }
-      
-      btn.disabled = true;
-      btn.textContent = 'Adding...';
-      
-      try {
-        const response = await fetch(SHEET_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: name })
-        });
-        
-        input.value = '';
-        document.getElementById('success').style.display = 'block';
-        document.getElementById('error').style.display = 'none';
+  async function submitName() {
+  const input = document.getElementById('nameInput');
+  const btn = document.getElementById('submitBtn');
+  const name = input.value.trim();
+  
+  if (!name) {
+    alert('Please enter your name');
+    return;
+  }
+  
+  btn.disabled = true;
+  btn.textContent = 'Adding...';
+  
+  try {
+    // Try multiple methods
+    const url = SHEET_URL + '?name=' + encodeURIComponent(name);
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      redirect: 'follow'
+    });
+    
+    input.value = '';
+    document.getElementById('success').style.display = 'block';
+    document.getElementById('error').style.display = 'none';
+    
+    setTimeout(() => {
+      document.getElementById('success').style.display = 'none';
+    }, 4000);
+    
+    updateCount();
+  } catch (error) {
+    console.error('Error:', error);
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').textContent = 'Error: ' + error.message;
+    document.getElementById('success').style.display = 'none';
+  }
+  
+  btn.disabled = false;
+  btn.textContent = 'Add My Name';
+}
         
         setTimeout(() => {
           document.getElementById('success').style.display = 'none';
@@ -241,3 +258,4 @@
 </body>
 
 </html>
+
